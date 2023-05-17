@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Chess.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">xxlchess</a> &gt; <a href="index.source.html" class="el_package">XXLChess.model</a> &gt; <span class="el_source">Chess.java</span></div><h1>Chess.java</h1><pre class="source lang-java linenums">package XXLChess.model;
+
+import XXLChess.util.Aim;
+import XXLChess.util.Point;
+import processing.core.PApplet;
+import processing.core.PImage;
+import java.util.*;
+
+
+public abstract class Chess implements Cloneable{
+    protected boolean isWhite;
+    protected Point point;
+<span class="nc" id="L13">    protected int pix = 48;</span>
+    protected int img_x;
+    protected int img_y;
+    protected double value;
+    private PImage sprite;
+    private boolean isKing;
+    protected List&lt;Chess&gt; chessList;
+
+
+<span class="nc" id="L22">    public Chess(int x, int y, boolean isWhite, PImage sprite, List&lt;Chess&gt; chessList) {</span>
+<span class="nc" id="L23">        this.isWhite = isWhite;</span>
+<span class="nc" id="L24">        this.sprite = sprite;</span>
+<span class="nc" id="L25">        this.point = new Point(x, y);</span>
+<span class="nc" id="L26">        this.img_x = x * pix;</span>
+<span class="nc" id="L27">        this.img_y = y * pix;</span>
+<span class="nc" id="L28">        this.isKing = false;</span>
+<span class="nc" id="L29">        this.value = 0;</span>
+<span class="nc" id="L30">        this.chessList = chessList;</span>
+<span class="nc" id="L31">    }</span>
+
+    public double getValue() {
+<span class="nc" id="L34">        return value;</span>
+    }
+
+    public void setValue(int value) {
+<span class="nc" id="L38">        this.value = value;</span>
+<span class="nc" id="L39">    }</span>
+
+    public void setSprite(PImage sprite) {
+
+<span class="nc" id="L43">        this.sprite = sprite;</span>
+<span class="nc" id="L44">    }</span>
+
+    public void setPix(int pix) {
+<span class="nc" id="L47">        this.pix = pix;</span>
+<span class="nc" id="L48">    }</span>
+
+    public void draw(PApplet app) {
+<span class="nc" id="L51">        app.image(this.sprite, this.img_x, this.img_y);</span>
+<span class="nc" id="L52">    }</span>
+
+    public List&lt;Aim&gt; getMovableLocation(Board board) {
+
+<span class="nc" id="L56">        List&lt;Aim&gt; ls = new ArrayList&lt;Aim&gt;();</span>
+<span class="nc" id="L57">        List&lt;Aim&gt; movableLocations = getMovableLocationWithoutCheck(board);</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (!board.check(isWhite)) {</span>
+<span class="nc" id="L59">            ls = getMovableLocationWithoutCheck(board);</span>
+        } else {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            for(Aim aim: movableLocations) {</span>
+<span class="nc" id="L62">                Board cloned_board = null;</span>
+                try {
+<span class="nc" id="L64">                    cloned_board = board.clone();</span>
+<span class="nc" id="L65">                } catch (CloneNotSupportedException e) {</span>
+<span class="nc" id="L66">                    throw new RuntimeException(e);</span>
+<span class="nc" id="L67">                }</span>
+<span class="nc" id="L68">                Chess cloned_chess = cloned_board.findChess(point.getX(),point.getY());</span>
+<span class="nc" id="L69">                cloned_board.move(cloned_chess, aim);</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                if(!cloned_board.check(isWhite)){</span>
+<span class="nc" id="L71">                    ls.add(aim);</span>
+                }
+<span class="nc" id="L73">            }</span>
+        }
+<span class="nc" id="L75">        return ls;</span>
+
+    }
+
+
+
+
+    public List&lt;Aim&gt; getMovableLocationWithoutCheck(Board board) {
+<span class="nc" id="L83">        List&lt;Point&gt; ls = getLogicalLocation();</span>
+<span class="nc" id="L84">        List&lt;Aim&gt; aims = new ArrayList&lt;Aim&gt;();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        for (Point point : ls) {</span>
+<span class="nc bnc" id="L86" title="All 8 branches missed.">            if (point.getX() &lt; board.getWidth() &amp;&amp; point.getY() &lt; board.getLength() &amp;&amp; point.getX() &gt;= 0 &amp;&amp; point.getY() &gt;= 0) {   //board boardline</span>
+<span class="nc" id="L87">                Chess found = board.findChess(point.getX(), point.getY());</span>
+<span class="nc" id="L88">                Aim aim = null;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">                if (found == null) {</span>
+<span class="nc" id="L90">                    aim = new Aim(point, false);</span>
+<span class="nc" id="L91">                    aims.add(aim);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                } else if (found.isWhite() != isWhite) {</span>
+<span class="nc" id="L93">                    aim = new Aim(point, true);</span>
+<span class="nc" id="L94">                    aims.add(aim);</span>
+                }
+            }
+<span class="nc" id="L97">        }</span>
+<span class="nc" id="L98">        return aims;</span>
+    }
+
+
+
+    public boolean isKing() {
+<span class="nc" id="L104">        return isKing;</span>
+    }
+
+    public static double distance_between(int x1, int y1, int x2, int y2) {
+<span class="nc" id="L108">        int dx = x1 - x2;</span>
+<span class="nc" id="L109">        int dy = y1 - y2;</span>
+<span class="nc" id="L110">        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));</span>
+    }
+
+    public void setKing(boolean king) {
+<span class="nc" id="L114">        isKing = king;</span>
+<span class="nc" id="L115">    }</span>
+//Wrong chess implementation    every chess goes the same way(available in circle)
+    public List&lt;Point&gt; getLogicalLocation() {
+<span class="nc" id="L118">        int x = point.getX();</span>
+<span class="nc" id="L119">        int y = point.getY();</span>
+<span class="nc" id="L120">        Point a = new Point(x - 1, y - 1);</span>
+<span class="nc" id="L121">        Point b = new Point(x, y - 1);</span>
+<span class="nc" id="L122">        Point c = new Point(x + 1, y - 1);</span>
+<span class="nc" id="L123">        Point d = new Point(x - 1, y);</span>
+<span class="nc" id="L124">        Point e = new Point(x + 1, y);</span>
+<span class="nc" id="L125">        Point f = new Point(x - 1, y + 1);</span>
+<span class="nc" id="L126">        Point g = new Point(x, y + 1);</span>
+<span class="nc" id="L127">        Point h = new Point(x + 1, y + 1);</span>
+<span class="nc" id="L128">        List&lt;Point&gt; ls = new ArrayList&lt;Point&gt;();</span>
+<span class="nc" id="L129">        ls.add(a);</span>
+<span class="nc" id="L130">        ls.add(b);</span>
+<span class="nc" id="L131">        ls.add(c);</span>
+<span class="nc" id="L132">        ls.add(d);</span>
+<span class="nc" id="L133">        ls.add(e);</span>
+<span class="nc" id="L134">        ls.add(f);</span>
+<span class="nc" id="L135">        ls.add(g);</span>
+<span class="nc" id="L136">        ls.add(h);</span>
+<span class="nc" id="L137">        return ls;</span>
+    }
+
+    public boolean isWhite() {
+<span class="nc" id="L141">        return isWhite;</span>
+    }
+
+    public boolean tick(double piece_movement_speed, double max_movement_time, int FPS) {
+<span class="nc" id="L145">        int x = point.getX();</span>
+<span class="nc" id="L146">        int y = point.getY();      // coordinate of the chess</span>
+<span class="nc bnc" id="L147" title="All 4 branches missed.">        if(x*48 == img_x &amp;&amp; y*48 == img_y) {            //check the position of the chess and the image</span>
+<span class="nc" id="L148">            return false;</span>
+        }
+<span class="nc" id="L150">        double distance = distance_between(x, y, img_x, img_y);   // if the position is not the same calculate the distance to get the time</span>
+<span class="nc" id="L151">        double time = distance / (piece_movement_speed * FPS);</span>
+<span class="nc" id="L152">        double speed = piece_movement_speed;</span>
+
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        if (time &gt; max_movement_time) {</span>
+<span class="nc" id="L155">            speed = distance / (time * FPS);</span>
+        }
+<span class="nc" id="L157">        int pix_x = x * 48;</span>
+<span class="nc" id="L158">        int pix_y = y * 48;</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        if (img_x != pix_x) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">            if (img_x &gt; pix_x) {</span>
+<span class="nc" id="L161">                img_x -= speed;</span>
+            } else {
+<span class="nc" id="L163">                img_x += speed;</span>
+            }
+        }
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        if (img_y != pix_y) {</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">            if (img_y &gt; pix_y) {</span>
+<span class="nc" id="L168">                img_y -= speed;</span>
+            } else {
+<span class="nc" id="L170">                img_y += speed;</span>
+            }
+        }
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        if (Math.abs(img_x - pix_x) &lt; speed) {</span>
+<span class="nc" id="L174">            img_x = pix_x;</span>
+        }
+<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (Math.abs(img_y - pix_y) &lt; speed) {</span>
+<span class="nc" id="L177">            img_y = pix_y;</span>
+        }
+<span class="nc" id="L179">        return true;</span>
+    }
+
+    public int getX() {
+<span class="nc" id="L183">        return point.getX();</span>
+
+    }
+
+    public int getY() {
+<span class="nc" id="L188">        return point.getY();</span>
+    }
+
+    public Point getPoint() {
+<span class="nc" id="L192">        return point;</span>
+    }
+
+    public void setPoint(Point point){
+<span class="nc" id="L196">        this.point = point;</span>
+<span class="nc" id="L197">    }</span>
+
+    public int getImg_x() {
+<span class="nc" id="L200">        return img_x;</span>
+    }
+
+    public int getImg_y() {
+<span class="nc" id="L204">        return img_y;</span>
+    }
+
+
+    @Override
+    public Chess clone() throws CloneNotSupportedException {
+<span class="nc" id="L210">        Chess cloned = (Chess) super.clone();</span>
+<span class="nc" id="L211">        return cloned;</span>
+    }
+
+    public boolean is_opposite(int x, int y)
+    {
+<span class="nc bnc" id="L216" title="All 2 branches missed.">        for(Chess chess : this.chessList)</span>
+        {
+<span class="nc bnc" id="L218" title="All 2 branches missed.">            if(this.isWhite != chess.isWhite)</span>
+            {
+<span class="nc bnc" id="L220" title="All 4 branches missed.">                if(chess.getX() == x &amp;&amp; chess.getY() == y)</span>
+                {
+<span class="nc" id="L222">                    return true;</span>
+                }
+            }
+<span class="nc" id="L225">        }</span>
+<span class="nc" id="L226">        return false;</span>
+    }
+
+    public boolean is_self(int x, int y)
+    {
+<span class="nc bnc" id="L231" title="All 2 branches missed.">        for(Chess chess : this.chessList)</span>
+        {
+<span class="nc bnc" id="L233" title="All 2 branches missed.">            if(this.isWhite == chess.isWhite)</span>
+            {
+<span class="nc bnc" id="L235" title="All 4 branches missed.">                if(chess.getX() == x &amp;&amp; chess.getY() == y)</span>
+                {
+<span class="nc" id="L237">                    return true;</span>
+                }
+            }
+<span class="nc" id="L240">        }</span>
+<span class="nc" id="L241">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

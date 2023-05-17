@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Pawn.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">xxlchess</a> &gt; <a href="index.source.html" class="el_package">XXLChess.model.chess</a> &gt; <span class="el_source">Pawn.java</span></div><h1>Pawn.java</h1><pre class="source lang-java linenums">package XXLChess.model.chess;
+
+import XXLChess.model.Chess;
+import XXLChess.util.Point;
+import processing.core.PApplet;
+import processing.core.PImage;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static XXLChess.App.CELLSIZE;
+
+public class Pawn extends Chess {
+
+<span class="nc" id="L15">    boolean isQueen = false;</span>
+    PImage queenImage;
+
+    public Pawn(int x, int y, boolean isWhite, PImage sprite, List&lt;Chess&gt; chessList, PImage queenImage) {
+<span class="nc" id="L19">        super(x, y, isWhite, sprite, chessList);</span>
+<span class="nc" id="L20">        this.value = 1;</span>
+<span class="nc" id="L21">        this.queenImage = queenImage;</span>
+<span class="nc" id="L22">    }</span>
+
+    @Override
+    public List&lt;Point&gt; getLogicalLocation() {
+<span class="nc" id="L26">        int x = point.getX();</span>
+<span class="nc" id="L27">        int y = point.getY();</span>
+<span class="nc" id="L28">        List&lt;Point&gt; ls = new ArrayList&lt;Point&gt;();</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if(this.isQueen)</span>
+        {
+<span class="nc" id="L31">            int dr[] = {1, 0, -1, 0, 1, 1, -1, -1};</span>
+<span class="nc" id="L32">            int dc[] = {0, 1, 0, -1, 1, -1, 1, -1};</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            for(int i=0;i&lt;dr.length;i++)</span>
+            {
+<span class="nc bnc" id="L35" title="All 2 branches missed.">                for(int j=1;j&lt;100;j++)</span>
+                {
+<span class="nc" id="L37">                    int curx = x + dr[i] * j;</span>
+<span class="nc" id="L38">                    int cury = y + dc[i] * j;</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">                    if(this.is_opposite(curx, cury))</span>
+                    {
+<span class="nc" id="L41">                        ls.add(new Point(curx, cury));</span>
+<span class="nc" id="L42">                        break;</span>
+                    }
+<span class="nc bnc" id="L44" title="All 2 branches missed.">                    if(this.is_self(curx, cury))</span>
+                    {
+<span class="nc" id="L46">                        break;</span>
+                    }
+<span class="nc" id="L48">                    ls.add(new Point(curx, cury));</span>
+                }
+            }
+<span class="nc" id="L51">        }</span>
+<span class="nc bnc" id="L52" title="All 4 branches missed.">        else if(this.isWhite &amp;&amp; y == 12)</span>
+        {
+<span class="nc" id="L54">            int dr[] = {0};</span>
+<span class="nc" id="L55">            int dc[] = {-1};</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            for(int i=0;i&lt;dr.length;i++)</span>
+            {
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                for(int j=1;j&lt;=2;j++)</span>
+                {
+<span class="nc" id="L60">                    int curx = x + dr[i] * j;</span>
+<span class="nc" id="L61">                    int cury = y + dc[i] * j;</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                    if(this.is_opposite(curx, cury))</span>
+                    {
+<span class="nc" id="L64">                        ls.add(new Point(curx, cury));</span>
+<span class="nc" id="L65">                        break;</span>
+                    }
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                    if(this.is_self(curx, cury))</span>
+                    {
+<span class="nc" id="L69">                        break;</span>
+                    }
+<span class="nc" id="L71">                    ls.add(new Point(curx, cury));</span>
+                }
+            }
+<span class="nc" id="L74">        }</span>
+<span class="nc bnc" id="L75" title="All 4 branches missed.">        else if(!this.isWhite &amp;&amp; y == 1)</span>
+        {
+<span class="nc" id="L77">            int dr[] = {0};</span>
+<span class="nc" id="L78">            int dc[] = {1};</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            for(int i=0;i&lt;dr.length;i++)</span>
+            {
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                for(int j=1;j&lt;=2;j++)</span>
+                {
+<span class="nc" id="L83">                    int curx = x + dr[i] * j;</span>
+<span class="nc" id="L84">                    int cury = y + dc[i] * j;</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">                    if(this.is_opposite(curx, cury))</span>
+                    {
+<span class="nc" id="L87">                        ls.add(new Point(curx, cury));</span>
+<span class="nc" id="L88">                        break;</span>
+                    }
+<span class="nc bnc" id="L90" title="All 2 branches missed.">                    if(this.is_self(curx, cury))</span>
+                    {
+<span class="nc" id="L92">                        break;</span>
+                    }
+<span class="nc" id="L94">                    ls.add(new Point(curx, cury));</span>
+                }
+            }
+<span class="nc" id="L97">        }</span>
+        else
+        {
+<span class="nc" id="L100">            int dy = 1;</span>
+<span class="nc bnc" id="L101" title="All 4 branches missed.">            if(this.isWhite &amp;&amp; y == 12)</span>
+<span class="nc" id="L102">                dy = -2;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            else if(this.isWhite)</span>
+<span class="nc" id="L104">                dy = -1;</span>
+<span class="nc bnc" id="L105" title="All 4 branches missed.">            else if(!this.isWhite &amp;&amp; y == 1)</span>
+<span class="nc" id="L106">                dy = 2;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            else if(!this.isWhite)</span>
+<span class="nc" id="L108">                dy = 1;</span>
+<span class="nc" id="L109">            int curx = x;</span>
+<span class="nc" id="L110">            int cury = y + dy;</span>
+<span class="nc bnc" id="L111" title="All 4 branches missed.">            if(!this.is_opposite(curx, cury) &amp;&amp; !this.is_self(curx, cury))</span>
+<span class="nc" id="L112">                ls.add(new Point(curx, cury));</span>
+<span class="nc" id="L113">            curx = x - 1;</span>
+<span class="nc" id="L114">            cury = y + dy;</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            if(this.is_opposite(curx, cury))</span>
+<span class="nc" id="L116">                ls.add(new Point(curx, cury));</span>
+<span class="nc" id="L117">            curx = x + 1;</span>
+<span class="nc" id="L118">            cury = y + dy;</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">            if(this.is_opposite(curx, cury))</span>
+<span class="nc" id="L120">                ls.add(new Point(curx, cury));</span>
+        }
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        if(this.isWhite)</span>
+        {
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            if(y == 7)</span>
+            {
+<span class="nc" id="L127">                this.isQueen = true;</span>
+            }
+        }
+        else
+        {
+<span class="nc bnc" id="L132" title="All 2 branches missed.">            if(y == 8)</span>
+            {
+<span class="nc" id="L134">                this.isQueen = true;</span>
+            }
+        }
+
+<span class="nc" id="L138">        return ls;</span>
+    }
+
+    public void draw(PApplet app) {
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if(!isQueen)</span>
+<span class="nc" id="L143">            super.draw(app);</span>
+        else
+<span class="nc" id="L145">            app.image(this.queenImage, this.img_x, this.img_y);</span>
+<span class="nc" id="L146">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

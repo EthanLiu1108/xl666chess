@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">xxlchess</a> &gt; <a href="index.source.html" class="el_package">XXLChess.model</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">package XXLChess.model;
+
+import processing.core.PApplet;
+
+public abstract class Player {
+    private int seconds;        //current time
+    private int increment;    //increment time after played
+
+    private boolean is_white;
+
+<span class="nc" id="L11">    public Player(int seconds, int increment, boolean is_white) {</span>
+<span class="nc" id="L12">        this.seconds = seconds;</span>
+<span class="nc" id="L13">        this.increment = increment;</span>
+<span class="nc" id="L14">        this.is_white = is_white;</span>
+<span class="nc" id="L15">    }</span>
+
+    public boolean isWhite() {
+<span class="nc" id="L18">        return is_white;</span>
+    }
+
+    public int getSeconds() {
+<span class="nc" id="L22">        return seconds;</span>
+    }
+
+    public int getIncrement() {
+<span class="nc" id="L26">        return increment;</span>
+    }
+
+    public void setSeconds(int seconds) {
+<span class="nc" id="L30">        this.seconds = seconds;</span>
+<span class="nc" id="L31">    }</span>
+
+    public void setIncrement(int increment) {
+<span class="nc" id="L34">        this.increment = increment;</span>
+<span class="nc" id="L35">    }</span>
+
+    public String getFormatTime() {             //transform second to format minute
+<span class="nc" id="L38">        int minutes = seconds / 60;</span>
+<span class="nc" id="L39">        int remainderSeconds = seconds % 60;</span>
+<span class="nc" id="L40">        String formattedTime = String.format(&quot;%2d:%02d&quot;, minutes, remainderSeconds);</span>
+<span class="nc" id="L41">        return formattedTime;</span>
+    }
+
+
+    public abstract void draw(PApplet app);
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

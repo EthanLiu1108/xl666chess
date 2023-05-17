@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>App.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">xxlchess</a> &gt; <a href="index.source.html" class="el_package">XXLChess</a> &gt; <span class="el_source">App.java</span></div><h1>App.java</h1><pre class="source lang-java linenums">package XXLChess;
+
+//import org.reflections.Reflections;
+//import org.reflections.scanners.Scanners;
+
+import XXLChess.model.Game;
+import processing.core.PApplet;
+import processing.data.JSONObject;
+import processing.event.MouseEvent;
+
+import java.applet.Applet;
+import java.applet.AudioClip;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URI;
+
+public class App extends PApplet {
+
+    public static final int SPRITESIZE = 480;
+    public static final int CELLSIZE = 48;
+    public static final int SIDEBAR = 120;
+    public static final int BOARD_WIDTH = 14;
+
+<span class="nc" id="L24">    public static int WIDTH = CELLSIZE * BOARD_WIDTH + SIDEBAR;</span>
+<span class="nc" id="L25">    public static int HEIGHT = BOARD_WIDTH * CELLSIZE;</span>
+
+    public static final int FPS = 60;
+
+    public String configPath;
+
+    public Game game;
+
+    public static AudioClip audioMove;
+    public static AudioClip audioCapture;
+
+
+<span class="nc" id="L37">    public App() {</span>
+
+<span class="nc" id="L39">        this.configPath = &quot;config.json&quot;;</span>
+
+        try {
+<span class="nc" id="L42">            audioMove = Applet.newAudioClip(new File(&quot;src/main/resources/XXLChess/move-self.wav&quot;).toURI().toURL());</span>
+<span class="nc" id="L43">            audioCapture = Applet.newAudioClip(new File(&quot;src/main/resources/XXLChess/capture.wav&quot;).toURI().toURL());</span>
+<span class="nc" id="L44">        } catch (MalformedURLException e) {</span>
+<span class="nc" id="L45">            e.printStackTrace();</span>
+<span class="nc" id="L46">        }</span>
+<span class="nc" id="L47">    }</span>
+
+    /**
+     * Initialise the setting of the window size.
+     */
+    public void settings() {
+<span class="nc" id="L53">        size(WIDTH, HEIGHT);</span>
+<span class="nc" id="L54">    }</span>
+
+    /**
+     * Load all resources such as images. Initialise the elements such as the player, enemies and map elements.
+     */
+    public void setup() {
+<span class="nc" id="L60">        frameRate(FPS);</span>
+        // LOAD IMAGE
+
+        // load config
+<span class="nc" id="L64">        JSONObject conf = loadJSONObject(new File(this.configPath));</span>
+<span class="nc" id="L65">        game = new Game(conf, this);</span>
+
+<span class="nc" id="L67">    }</span>
+
+
+
+
+
+
+    /**
+     * Receive key pressed signal from the keyboard.
+     */
+    public void keyPressed() {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if(this.key == 'e')</span>
+        {
+<span class="nc" id="L80">            game.restart();</span>
+<span class="nc" id="L81">            JSONObject conf = loadJSONObject(new File(this.configPath));</span>
+<span class="nc" id="L82">            game = new Game(conf, this);</span>
+<span class="nc" id="L83">            draw();</span>
+        }
+<span class="nc" id="L85">    }</span>
+
+    /**
+     * Receive key released signal from the keyboard.
+     */
+    public void keyReleased() {
+
+<span class="nc" id="L92">    }</span>
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+<span class="nc" id="L97">        game.start(mouseX,mouseY);</span>
+<span class="nc" id="L98">    }</span>
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+<span class="nc" id="L103">    }</span>
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+<span class="nc" id="L108">    }</span>
+
+
+
+
+
+
+
+
+    /**
+     * Draw all elements in the game by current frame.
+     */
+    public void draw() {
+
+<span class="nc" id="L122">        game.draw(this);</span>
+
+<span class="nc" id="L124">    }</span>
+
+
+
+
+
+
+
+
+
+
+
+    // Add any additional methods or attributes you want. Please put classes in different files.
+
+
+    public static void main(String[] args) {
+
+<span class="nc" id="L141">        PApplet.main(&quot;XXLChess.App&quot;);</span>
+<span class="nc" id="L142">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

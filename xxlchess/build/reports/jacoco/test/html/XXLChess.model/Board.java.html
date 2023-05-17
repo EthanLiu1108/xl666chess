@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Board.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">xxlchess</a> &gt; <a href="index.source.html" class="el_package">XXLChess.model</a> &gt; <span class="el_source">Board.java</span></div><h1>Board.java</h1><pre class="source lang-java linenums">package XXLChess.model;
+
+import XXLChess.App;
+import XXLChess.util.Aim;
+import XXLChess.util.Color;
+import XXLChess.util.Point;
+import processing.core.PApplet;
+
+import java.util.ArrayList;
+import java.util.List;
+import static XXLChess.App.CELLSIZE;
+public class Board implements Cloneable{
+    private int width;
+    private int length;
+    private int squareSize;
+    private List&lt;Chess&gt; chessList;
+
+<span class="nc" id="L18">    public Board(int width, int length,int squareSize, List&lt;Chess&gt; chessList) {</span>
+<span class="nc" id="L19">        this.width = width;</span>
+<span class="nc" id="L20">        this.length = length;</span>
+<span class="nc" id="L21">        this.squareSize = squareSize;</span>
+<span class="nc" id="L22">        this.chessList = chessList;</span>
+<span class="nc" id="L23">    }</span>
+
+<span class="nc" id="L25">    public Board(){</span>
+<span class="nc" id="L26">        this.width = 14;</span>
+<span class="nc" id="L27">        this.length = 14;</span>
+<span class="nc" id="L28">        this.chessList = new ArrayList&lt;Chess&gt;();</span>
+<span class="nc" id="L29">    }</span>
+
+<span class="nc" id="L31">    public Board(List&lt;Chess&gt; chessList) {</span>
+<span class="nc" id="L32">        this.width = 14;</span>
+<span class="nc" id="L33">        this.length = 14;</span>
+<span class="nc" id="L34">        this.chessList = chessList;</span>
+<span class="nc" id="L35">    }</span>
+
+<span class="nc" id="L37">    public Board(int squareSize, List&lt;Chess&gt; chessList) {</span>
+<span class="nc" id="L38">        this.width = 14;</span>
+<span class="nc" id="L39">        this.length = 14;</span>
+<span class="nc" id="L40">        this.squareSize = squareSize;</span>
+<span class="nc" id="L41">        this.chessList = chessList;</span>
+<span class="nc" id="L42">    }</span>
+
+    public boolean check(boolean is_white){
+<span class="nc" id="L45">        Point kingPoint = getKingLocation(is_white);</span>
+//        System.out.println(kingPoint.getX());
+//        System.out.println(kingPoint.getY());
+//        System.out.println(is_white);
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        for(Chess chess: chessList){</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">            if(chess.isWhite() != is_white){</span>
+<span class="nc" id="L51">                List&lt;Aim&gt; aims = chess.getMovableLocationWithoutCheck(this);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">                for(Aim aim:aims) {</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">                    if(aim.getPoint().equals(kingPoint)) {</span>
+<span class="nc" id="L54">                        return true;</span>
+                    }
+<span class="nc" id="L56">                }</span>
+            }
+<span class="nc" id="L58">        }</span>
+<span class="nc" id="L59">        return false;</span>
+    }
+
+    public boolean checkMate(boolean is_white){
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        for(Chess chess: chessList){</span>
+<span class="nc bnc" id="L64" title="All 4 branches missed.">            if(chess.isWhite() == is_white &amp;&amp; chess.getMovableLocation(this).size() != 0){</span>
+<span class="nc" id="L65">                return false;</span>
+            }
+<span class="nc" id="L67">        }</span>
+<span class="nc" id="L68">        return true;</span>
+    }
+
+    public List&lt;Chess&gt; getAllChecker(boolean is_white) {
+<span class="nc" id="L72">        Point kingPoint = getKingLocation(is_white);</span>
+<span class="nc" id="L73">        List&lt;Chess&gt; checkers = new ArrayList&lt;Chess&gt;();</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for(Chess chess: chessList){</span>
+<span class="nc bnc" id="L75" title="All 4 branches missed.">            if(chess.isWhite() != is_white &amp;&amp; chess.isKing() == false){</span>
+<span class="nc" id="L76">                List&lt;Aim&gt; aims = chess.getMovableLocationWithoutCheck(this);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                for(Aim aim:aims) {</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                    if(aim.getPoint().equals(kingPoint)) {</span>
+<span class="nc" id="L79">                        checkers.add(chess);</span>
+<span class="nc" id="L80">                        break;</span>
+                    }
+<span class="nc" id="L82">                }</span>
+            }
+<span class="nc" id="L84">        }</span>
+<span class="nc" id="L85">        return checkers;</span>
+    }
+
+    public void drawBoard (PApplet app) {
+<span class="nc" id="L89">        int squareSize = CELLSIZE;</span>
+<span class="nc" id="L90">        app.noStroke();</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        for (int i = 0; i &lt; width; i++) {</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            for (int j = 0; j &lt; length; j++) {</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                app.fill((i + j) % 2 == 0 ? 0xFFF0D9B5 : 0xFFB58863);          // light brown and dark brown</span>
+<span class="nc" id="L94">                app.rect(i * squareSize, j * squareSize, squareSize, squareSize);</span>
+            }
+        }
+<span class="nc" id="L97">    }</span>
+
+
+
+    public void drawChess (PApplet app) {
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        for(Chess chess: chessList){</span>
+<span class="nc" id="L103">            chess.draw(app);</span>
+<span class="nc" id="L104">        }</span>
+<span class="nc" id="L105">    }</span>
+// move and remove
+    public Chess findChess(int x, int y){
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        for(Chess chess: chessList) {</span>
+<span class="nc bnc" id="L109" title="All 4 branches missed.">            if(chess.getX() == x &amp;&amp; chess.getY() == y) {</span>
+<span class="nc" id="L110">                return chess;</span>
+            }
+<span class="nc" id="L112">        }</span>
+<span class="nc" id="L113">        return null;</span>
+    }
+    public void move(Chess chess, Aim aim){
+<span class="nc" id="L116">        App.audioMove.play();</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        if(aim.isCapture()) {</span>
+<span class="nc" id="L118">            App.audioCapture.play();</span>
+<span class="nc" id="L119">            removeChess(aim.getPoint());</span>
+        }
+<span class="nc" id="L121">        chess.setPoint(aim.getPoint());</span>
+<span class="nc" id="L122">    }</span>
+
+    public void removeChess(Point point){
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        for(Chess chess:chessList){</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">            if(chess.getPoint().equals(point)){</span>
+<span class="nc" id="L127">                chessList.remove(chess);</span>
+<span class="nc" id="L128">                break;</span>
+            }
+<span class="nc" id="L130">        }</span>
+<span class="nc" id="L131">    }</span>
+
+    public int getWidth() {
+<span class="nc" id="L134">        return width;</span>
+    }
+
+    public int getLength() {
+<span class="nc" id="L138">        return length;</span>
+    }
+
+    public List&lt;Chess&gt; getChessList() {
+<span class="nc" id="L142">        return chessList;</span>
+    }
+
+    public void addChess(Chess chess) {
+<span class="nc" id="L146">        chessList.add(chess);</span>
+<span class="nc" id="L147">    }</span>
+
+    public Point getKingLocation(boolean isWhite) {
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        for(Chess chess:chessList){</span>
+<span class="nc bnc" id="L151" title="All 4 branches missed.">            if(chess.isKing() &amp;&amp; chess.isWhite() == isWhite){</span>
+<span class="nc" id="L152">                return chess.getPoint();</span>
+            }
+<span class="nc" id="L154">        }</span>
+<span class="nc" id="L155">        return null;</span>
+    }
+
+    public List&lt;Aim&gt; selectChess(Chess chess) {
+<span class="nc" id="L159">        return chess.getMovableLocation(this);</span>
+    }
+
+    @Override
+    public Board clone() throws CloneNotSupportedException {    //check if next step can get out from status check
+<span class="nc" id="L164">        Board cloned = (Board) super.clone();</span>
+<span class="nc" id="L165">        cloned.chessList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        for(Chess chess: chessList){</span>
+<span class="nc" id="L167">            Chess temp = chess.clone();</span>
+<span class="nc" id="L168">            cloned.chessList.add(temp);</span>
+<span class="nc" id="L169">        }</span>
+<span class="nc" id="L170">        return cloned;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
